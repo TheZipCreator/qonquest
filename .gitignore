@@ -15,3 +15,4 @@ qonquest-test-*
 *.lst
 *.pdb
 source/terminal.d
+release/
