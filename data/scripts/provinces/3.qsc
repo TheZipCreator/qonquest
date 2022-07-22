@@ -1,0 +1,6 @@
+# 3 - London
+name "London";
+color 9;
+city 42 18;
+owner "GBR";
+adjacent 1 10;

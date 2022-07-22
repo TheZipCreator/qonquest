@@ -1,0 +1,6 @@
+# 6 - Amsterdam
+name "Amsterdam";
+color 4;
+city 52 17;
+owner "NET";
+adjacent 1 4;

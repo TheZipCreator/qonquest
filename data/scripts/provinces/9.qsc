@@ -1,0 +1,6 @@
+# 9 - Stockholm
+name "Stockholm";
+color 5;
+city 72 10;
+owner "SWE";
+adjacent 8;

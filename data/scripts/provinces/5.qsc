@@ -1,0 +1,6 @@
+# 5 - Rome
+name "Rome";
+color 10;
+city 63 30;
+owner "ITA";
+adjacent 1 4;

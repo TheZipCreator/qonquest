@@ -1,0 +1,6 @@
+# 7 - Algiers
+name "Algiers";
+color 3;
+city 55 36;
+owner "ALG";
+adjacent 2;

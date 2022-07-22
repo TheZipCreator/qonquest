@@ -1,0 +1,6 @@
+# 10 - Reykjavik
+name "Reykjavik";
+color 14;
+city 16 4;
+owner "ICE";
+adjacent 3;

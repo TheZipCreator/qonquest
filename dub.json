@@ -1,0 +1,11 @@
+{
+	"authors": [
+		"Zip"
+	],
+	"copyright": "Copyright © 2022, Zip",
+	"dependencies": {
+	},
+	"description": "A minimal D application.",
+	"license": "GNU General Public License v3",
+	"name": "qonquest"
+}

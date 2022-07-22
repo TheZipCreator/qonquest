@@ -1,0 +1,6 @@
+# 8 - Copenhagen
+name "Copenhagen";
+color 2;
+city 62 14;
+owner "DEN";
+adjacent 4 9;

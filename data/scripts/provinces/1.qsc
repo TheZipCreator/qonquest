@@ -1,0 +1,6 @@
+# 1 - Paris
+name "Paris";
+color 12;
+city 47 22;
+owner "FRA";
+adjacent 2 3 4 5 6;

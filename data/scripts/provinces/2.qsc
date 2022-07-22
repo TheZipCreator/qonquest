@@ -1,0 +1,6 @@
+# 2 - Madrid
+name "Madrid";
+color 11;
+city 35 32;
+owner "SPA";
+adjacent 1 7;

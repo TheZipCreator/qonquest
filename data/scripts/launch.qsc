@@ -1,0 +1,3 @@
+# ran before provinces are loaded
+# global scope
+registerCountry "FRA" "SPA" "GBR" "GER" "ITA" "NET" "ALG" "SWE" "DEN" "ICE";

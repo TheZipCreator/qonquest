@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/qonquest
+qonquest.so
+qonquest.dylib
+qonquest.dll
+qonquest.a
+qonquest.lib
+qonquest-test-*
+*.exe
+*.o
+*.obj
+*.lst
+*.pdb
+source/terminal.d
