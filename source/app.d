@@ -243,7 +243,7 @@ void nextTurn(Terminal* t) {
     }
     bool won = true;
     foreach(Province p; provinces) {
-      if(p.owner != player) {
+      if(!p.ocean && p.owner != player) {
         won = false;
         break;
       }

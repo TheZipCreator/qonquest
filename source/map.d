@@ -83,6 +83,7 @@ class Country {
     // distribute troops
     while(troopsRemaining > 0 && frontiers.length > 0) {
       int idx = rnd.front%cast(int)(frontiers.length);
+      rnd.popFront();
       frontiers[idx][0].troops++;
       troopsRemaining--;
     }
