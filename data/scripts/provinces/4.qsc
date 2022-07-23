@@ -3,4 +3,4 @@ name "Berlin";
 color 8;
 city 62 19;
 owner "GER";
-adjacent 1 5 6 8;
+adjacent 1 5 6 8 12;
