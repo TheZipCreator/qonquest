@@ -3,6 +3,7 @@ module qonquest.action;
 import qonquest.map, qonquest.app;
 import arsd.terminal;
 import std.string, std.random, std.algorithm;
+import core.thread;
 
 interface Action {
   void commit(Terminal* t);
@@ -24,7 +25,7 @@ class MoveAction : Action {
       source.troops = 0;
     } else {
       // do battle
-      bool display = source.owner == player || dest.owner == player;
+      bool display = source.owner == player || dest.owner == player || toggles["seeAllBattles"];
       if(display) {
         t.writefln("Battle of %s", dest.name);
         t.color(colors[source.owner.color], Color.black);
@@ -63,6 +64,7 @@ class MoveAction : Action {
           t.writefln("Defender rolls: %d, %d, %d", defenderRolls[0], defenderRolls[1], defenderRolls[2]);
           t.writefln("Attacker lost %d troops, defender lost %d troops", attackerLost, defenderLost);
           t.writeln();
+          if(toggles["waitBattleRounds"]) Thread.sleep(dur!("msecs")(500));
         }
         source.troops -= attackerLost;
         dest.troops -= defenderLost;

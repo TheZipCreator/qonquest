@@ -1,0 +1,5 @@
+Additions:
+* Added toggles
+Fixes:
+* Fixed a bug where AI would run even if they have no provinces
+* Added some miscallenous optimizations

@@ -46,6 +46,7 @@ enum Error {
   CANT_MOVE_TURN_1 = "You cannot move troops on turn 1.",
   PROVINCE_NOT_OWNED = "You do not own %s.",
   NOT_ADJACENT = "%s is not adjacent to %s.",
+  NO_TOGGLE = "Toggle \"%s\" does not exist.",
 }
 
 class CommandException : Exception {
@@ -58,6 +59,7 @@ Country* player;
 Action[] actions;
 int turn = 0;
 int troopsToDeploy = 0;
+bool[string] toggles;
 
 void main() {
   auto t = Terminal(ConsoleOutputType.linear);
@@ -66,6 +68,8 @@ void main() {
     runScript("data/scripts/launch.qsc", new GlobalScope(), &t);
     loadMap("data/map.bin", &t);
     changeMode(GameMode.MAIN_MENU, &t);
+    toggles["waitBattleRounds"] = false;
+    toggles["seeAllBattles"] = false;
     void expectArgs(string cmd, string[] args, int n) {
       if(args.length != n) {
         throw new CommandException(format(Error.COMMAND_REQUIRES_ARGS, cmd, n));
@@ -141,6 +145,8 @@ void main() {
                   t.writeln("  move <source> <dest>\n\tMove all units from <source> to <dest>. The provinces must be adjacent.");
                   t.writeln("  deploy <amt> <province>\n\tDeploy <amt> troops to <province>");
                   t.writeln("  end\n\tends the turn");
+                  t.writeln("  toggle\n\ttoggles a toggle");
+                  t.writeln("  toggles\n\tdisplays all toggles");
                   break;
                 case "map":
                   expectArgs(cmd, args, 1);
@@ -205,6 +211,24 @@ void main() {
                   expectArgs(cmd, args, 0);
                   nextTurn(&t);
                   break;
+                case "toggle": {
+                  expectArgs(cmd, args, 1);
+                  string toggle = args[0];
+                  if(toggle in toggles) {
+                    toggles[toggle] = !toggles[toggle];
+                    t.writefln("%s is now %s", toggle, toggles[toggle]);
+                  } else {
+                    throw new CommandException(format(Error.NO_TOGGLE, toggle));
+                  }
+                  break;
+                }
+                case "toggles": {
+                  expectArgs(cmd, args, 0);
+                  t.writeln("Toggles: ");
+                  t.writefln("waitBattleRounds: %s\n\tWaits 500ms for every round of a visible battle", toggles["waitBattleRounds"]);
+                  t.writefln("seeAllBattles: %s\n\tDisplays all battles", toggles["seeAllBattles"]);
+                  break;
+                }
                 default:
                   throw new CommandException(format(Error.NO_COMMAND, cmd));
               }
@@ -241,28 +265,26 @@ void nextTurn(Terminal* t) {
     actions = [];
     // run AI
     foreach(ref Country c; countries) {
-      if(&c != player) c.ai(t);
+      if(&c != player && c.getAllProvinces().length > 0) c.ai(t);
     }
     // update
     foreach(ref Country c; countries) {
       c.update(t);
     }
     auto input = RealTimeConsoleInput(t, ConsoleInputFlags.raw);
-    if(player.getAllProvinces().length == 0) {
+    bool won = true;
+    bool lost = true;
+    foreach(Province p; provinces) {
+      if(p.owner == player) lost = false;
+      if(!p.ocean && p.owner != player) won = false;
+    }
+    if(lost) {
       t.writeln("You have been defeated!");
       renderMap(MapRenderType.COUNTRY, t);
       t.flush();
       input.getch();
       exit(0);
-    }
-    bool won = true;
-    foreach(Province p; provinces) {
-      if(!p.ocean && p.owner != player) {
-        won = false;
-        break;
-      }
-    }
-    if(won) {
+    } else if(won) {
       t.writeln("You have achieved world domination!");
       renderMap(MapRenderType.COUNTRY, t);
       t.flush();
@@ -281,7 +303,7 @@ void changeMode(GameMode newMode, Terminal* t) {
   final switch(gameMode) {
     case GameMode.MAIN_MENU:
       t.writeln(readText("data/logo.txt"));
-      t.writeln("Qonquest v0.1");
+      t.writeln("Qonquest v0.1.1");
       t.writeln("Type 'help' in any mode for help");
       break;
     case GameMode.GAME:
