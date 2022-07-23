@@ -1,0 +1,6 @@
+# 13 - Ankara
+name "Ankara";
+color 1;
+city 89 32;
+owner "TUR";
+adjacent 12;

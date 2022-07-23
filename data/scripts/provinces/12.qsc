@@ -1,0 +1,6 @@
+# 12 - Belgrade
+name "Belgrade";
+color 13;
+city 75 27;
+owner "YUG";
+adjacent 11 5;

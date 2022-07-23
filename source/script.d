@@ -404,6 +404,15 @@ void interpret(Node[] nodes, Scope s, Terminal* t) {
               expect(LType.SEMICOLON);
               break;
             }
+            case "strait": {
+              ushort from0 = to!ushort(expect(LType.INT).value);
+              ushort from1 = to!ushort(expect(LType.INT).value);
+              ushort to0 = to!ushort(expect(LType.INT).value);
+              ushort to1 = to!ushort(expect(LType.INT).value);
+              expect(LType.SEMICOLON);
+              straits ~= Strait(tuple(from0, from1), tuple(to0, to1));
+              break;
+            }
             case "global":
               interpret(expectBlock().contents, new GlobalScope(), t);
               break;
