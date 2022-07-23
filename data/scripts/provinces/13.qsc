@@ -3,4 +3,4 @@ name "Ankara";
 color 1;
 city 89 32;
 owner "TUR";
-adjacent 12;
+adjacent 11;
