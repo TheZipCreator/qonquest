@@ -96,6 +96,7 @@ void main() {
                   t.writeln("  help\n\tdisplays this help message");
                   t.writeln("  map <province/country>\n\tdisplays the map");
                   t.writeln("  play <country>\n\tstarts a game as <country>");
+                  t.writeln("  changelog\n\tdisplays the changelog");
                   t.writeln("  quit\n\tquits the game");
                   break;
                 case "map":
@@ -119,6 +120,11 @@ void main() {
                   changeMode(GameMode.GAME, &t);
                   break;
                 }
+                case "changelog":
+                  expectArgs(cmd, args, 0);
+                  t.writeln("Changelog:");
+                  t.writeln(readText("data/changelog.txt"));
+                  break;
                 case "quit":
                   expectArgs(cmd, args, 0);
                   return;

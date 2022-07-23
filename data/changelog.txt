@@ -1,0 +1,13 @@
+Version 0.0.1:
+  ~ Fixed various bugs
+Version 0.1:
+  + Added version number
+  + Added straits (for visual clarity on provinces that aren't directly connected)
+  + Added Greece, Yugoslavia, and Turkey
+  + Added an inbuilt error handler
+  ~ Map now appears on the win/lose screen
+Version 0.1.1:
+  + Added toggles
+  + Added changelog to main menu
+  ~ Fixed a bug where AI would run even if they have no provinces
+  ~ Added some miscallenous optimizations
