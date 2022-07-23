@@ -3,4 +3,4 @@ name "Rome";
 color 10;
 city 63 30;
 owner "ITA";
-adjacent 1 4;
+adjacent 1 4 12;
