@@ -209,6 +209,7 @@ void main() {
                   break;
                 }
                 case "deploy": {
+                  expectArgs(cmd, args, 2);
                   try {
                     int amt = to!int(args[0]);
                     Province* p = findProvince(args[1])[0];
