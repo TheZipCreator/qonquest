@@ -120,11 +120,25 @@ void main() {
                   changeMode(GameMode.GAME, &t);
                   break;
                 }
-                case "changelog":
+                case "changelog": {
                   expectArgs(cmd, args, 0);
                   t.writeln("Changelog:");
-                  t.writeln(readText("data/changelog.txt"));
+                  string[] changelog = readText("data/changelog.txt").splitLines();
+                  foreach(string s; changelog) {
+                    if(s.indexOf("+") != -1) {
+                      t.color(Color.green | Bright, Color.black);
+                    } else if(s.indexOf("-") != -1) {
+                      t.color(Color.red | Bright, Color.black);
+                    } else if(s.indexOf("~") != -1) {
+                      t.color(Color.yellow | Bright, Color.black);
+                    } else {
+                      t.color(Color.white, Color.black);
+                    }
+                    t.writeln(s);
+                  }
+                  t.color(Color.white, Color.black);
                   break;
+                }
                 case "quit":
                   expectArgs(cmd, args, 0);
                   return;
