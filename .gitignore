@@ -14,5 +14,6 @@ qonquest-test-*
 *.obj
 *.lst
 *.pdb
+qonquest.bat
 source/terminal.d
 release/
