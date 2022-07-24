@@ -12,8 +12,10 @@ Version 0.2:
   + Added toggles
   + Added changelog to main menu
   + Added Romania, Hungary, Poland, Baltica, and Finland
+  + Added the ability to save and load the game
   ~ Fixed a bug where AI would run even if they have no provinces
   ~ Miscallenous optimizations
   ~ Fixed a bug where deploy no longer requires 2 arguments, and would crash if you tried to give it less
   ~ Fixed error handler
   ~ Changing scope in a script no longer crashes the interpreter
+  ~ France now owns Corsica

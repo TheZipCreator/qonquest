@@ -1,6 +1,6 @@
 module qonquest.app;
 
-import qonquest.map, qonquest.script, qonquest.action;
+import qonquest.map, qonquest.script, qonquest.action, qonquest.save;
 import std.stdio, std.string, std.file, std.conv, std.algorithm, std.typecons;
 import core.stdc.stdlib : exit;
 import arsd.terminal;
@@ -60,6 +60,7 @@ Action[] actions;
 int turn = 0;
 int troopsToDeploy = 0;
 bool[string] toggles;
+bool firstTurn = true;
 
 void main() {
   auto t = Terminal(ConsoleOutputType.linear);
@@ -98,6 +99,8 @@ void main() {
                   t.writeln("  map <province/country>\n\tdisplays the map");
                   t.writeln("  play <country>\n\tstarts a game as <country>");
                   t.writeln("  changelog\n\tdisplays the changelog");
+                  t.writeln("  load <name>\n\tloads a saved game");
+                  t.writeln("  saves\n\tdisplays a list of saved games");
                   t.writeln("  quit\n\tquits the game");
                   break;
                 case "map":
@@ -140,6 +143,19 @@ void main() {
                   t.color(Color.white, Color.black);
                   break;
                 }
+                case "load":
+                  expectArgs(cmd, args, 1);
+                  try {
+                    load(cast(ubyte[])read(format("data/saves/%s.qsf", args[0])));
+                    nextTurn(&t);
+                  } catch(FileException e) {
+                    writefln("\nError loading save: %s", e.message);
+                  }
+                  break;
+                case "saves":
+                  expectArgs(cmd, args, 0);
+                  t.writeln(saveList());
+                  break;
                 case "quit":
                   expectArgs(cmd, args, 0);
                   return;
@@ -168,6 +184,7 @@ void main() {
                   t.writeln("  end\n\tends the turn");
                   t.writeln("  toggle\n\ttoggles a toggle");
                   t.writeln("  toggles\n\tdisplays all toggles");
+                  t.writeln("  save <name>\n\tsaves the game to file <name>");
                   if(toggles["cheats"]) {
                     t.writeln("Cheat commands:");
                     t.writeln("  script <script>\n\texecutes a script");
@@ -256,6 +273,11 @@ void main() {
                   t.writefln("seeAllBattles: %s\n\tDisplays all battles", toggles["seeAllBattles"]);
                   break;
                 }
+                case "save":
+                  expectArgs(cmd, args, 1);
+                  std.file.write(format("data/saves/%s.qsf", args[0]), save(0));
+                  t.writeln("Save complete");
+                  break;
                 case "script":
                   expectArgs(cmd, args, 1);
                   if(!toggles["cheats"]) throw new CommandException(format(Error.NO_COMMAND, cmd));
@@ -306,7 +328,7 @@ string[] nextCommand(Terminal* t) {
 }
 
 void nextTurn(Terminal* t) {
-  if(turn != 0) {
+  if(!firstTurn) {
     commitAll(actions, t);
     actions = [];
     // run AI
@@ -338,6 +360,7 @@ void nextTurn(Terminal* t) {
       exit(0);
     }
   }
+  firstTurn = false;
   turn++;
   troopsToDeploy = player.troopsPerTurn();
   t.writefln("Turn %d", turn);

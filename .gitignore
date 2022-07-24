@@ -18,3 +18,4 @@ qonquest.bat
 source/terminal.d
 release/
 todo.txt
+*.qsf

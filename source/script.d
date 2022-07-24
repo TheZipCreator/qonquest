@@ -1,6 +1,6 @@
 module qonquest.script;
 
-import qonquest.map;
+import qonquest.map, qonquest.app;
 import std.string, std.file, std.array, std.conv, std.typecons;
 import arsd.terminal;
 
@@ -437,8 +437,13 @@ void interpret(Node[] nodes, Scope s, Terminal* t) {
               } else incorrectScope(l.line);
               break;
             }
+            case "turn": {
+              turn = to!int(expect(LType.INT).value)-1;
+              expect(LType.SEMICOLON);
+              break;
+            }
             case "global":
-              interpret(expectBlock().contents, new GlobalScope(), t);
+              interpret(expectBlock().contents~EOF, new GlobalScope(), t);
               break;
             case "province": {
               ushort id = to!ushort(expect(LType.INT).value);
@@ -447,7 +452,7 @@ void interpret(Node[] nodes, Scope s, Terminal* t) {
             }
             case "country": {
               string tag = expect(LType.STRING).value;
-              interpret(expectBlock().contents, new CountryScope(&(countries[tag])), t);
+              interpret(expectBlock().contents~EOF, new CountryScope(&(countries[tag])), t);
               break;
             }
             default:
