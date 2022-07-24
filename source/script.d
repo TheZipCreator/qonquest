@@ -48,7 +48,6 @@ class Lexeme : Node {
 }
 
 alias LType = Lexeme.LexemeType;
-const Lexeme EOF = new Lexeme(-1, "", LType.EOF);
 
 class Block : Node {
   Node[] contents;
@@ -294,7 +293,7 @@ class ProvinceScope : Scope {
 }
 
 void interpret(Node[] nodes, Scope s, Terminal* t) {
-  int lastLine = 0;
+  Node EOF = new Lexeme(-1, "", LType.EOF);
   bool isLexeme(Node n, LType t) {
     if(cast(Lexeme)n) return (cast(Lexeme)n).type == t;
     return false;
@@ -430,12 +429,20 @@ void interpret(Node[] nodes, Scope s, Terminal* t) {
               expect(LType.SEMICOLON);
               break;
             }
+            case "troops": {
+              if(ProvinceScope ps = cast(ProvinceScope)s) {
+                ps.p.troops += to!int(expect(LType.INT).value);
+                if(ps.p.troops < 0) ps.p.troops = 0;
+                expect(LType.SEMICOLON);
+              } else incorrectScope(l.line);
+              break;
+            }
             case "global":
               interpret(expectBlock().contents, new GlobalScope(), t);
               break;
             case "province": {
               ushort id = to!ushort(expect(LType.INT).value);
-              interpret(expectBlock().contents, new ProvinceScope(&(provinces[id])), t);
+              interpret(expectBlock().contents~EOF, new ProvinceScope(&(provinces[id])), t);
               break;
             }
             case "country": {
