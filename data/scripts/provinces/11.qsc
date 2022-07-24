@@ -3,4 +3,4 @@ name "Athens";
 color 6;
 city 82 34;
 owner "GRE";
-adjacent 12 13;
+adjacent 12 13 14;

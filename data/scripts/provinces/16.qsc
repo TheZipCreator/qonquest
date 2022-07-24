@@ -1,0 +1,7 @@
+# 16 - Warsaw
+name "Warsaw";
+color 9;
+char ".";
+city 74 18;
+owner "POL";
+adjacent 12 15 4 17;

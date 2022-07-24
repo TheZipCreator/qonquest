@@ -1,0 +1,7 @@
+# 17 - Riga
+name "Riga";
+color 6;
+char ".";
+city 83 12;
+owner "BAL";
+adjacent 16 18;

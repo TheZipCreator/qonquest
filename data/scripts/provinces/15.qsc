@@ -1,0 +1,7 @@
+# 15 - Budapest
+name "Budapest";
+color 11;
+char ".";
+city 75 25;
+owner "HUN";
+adjacent 12 14 16;

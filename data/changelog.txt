@@ -8,12 +8,10 @@ Version 0.1:
   + Added Greece, Yugoslavia, and Turkey
   + Added an inbuilt error handler
   ~ Map now appears on the win/lose screen
-Version 0.1.1:
+Version 0.2:
   + Added toggles
   + Added changelog to main menu
   ~ Fixed a bug where AI would run even if they have no provinces
   ~ Added some miscallenous optimizations
-Version ?:
-  + Added cheats toggle
   ~ Fixed a bug where deploy no longer requires 2 arguments, and would crash if you tried to give it less
   ~ Fixed error handler

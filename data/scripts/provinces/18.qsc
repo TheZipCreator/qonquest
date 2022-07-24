@@ -1,0 +1,7 @@
+# 18 - Helsinki
+name "Helsinki";
+color 8;
+char ".";
+city 85 8;
+owner "FIN";
+adjacent 9 17;

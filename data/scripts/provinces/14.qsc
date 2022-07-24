@@ -1,0 +1,7 @@
+# 14 - Bucharest
+name "Bucharest";
+color 3;
+city 85 28;
+owner "ROM";
+char ".";
+adjacent 15 12 11;

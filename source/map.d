@@ -19,6 +19,7 @@ struct Province {
   int[string] vars;
   int troops = 0;
   ushort[] adjacencies;
+  char ch = ' ';
 }
 Province[ushort] provinces;
 Tuple!(Province*, ushort) findProvince(string name) {
@@ -33,6 +34,7 @@ class Country {
   ubyte color;
   ushort capital;
   int[string] vars;
+  char ch = ' ';
   this() {}
 
   Province[] getAllProvinces() {
@@ -118,6 +120,12 @@ Country* findCountry(string name) {
     if(c.name == name) return &c;
   }
   return null;
+}
+string tagOf(Country* c) {
+  foreach(string tag, ref Country c2; countries) {
+    if(c == &c2) return tag;
+  }
+  return "";
 }
 struct Strait {
   Tuple!(ushort, ushort) from;
@@ -238,7 +246,7 @@ void renderMap(MapRenderType mrt, Terminal* t) {
           if(p.ocean) {
             tiles[x][y] = new Tile('~', tuple(colors[p.color], cast(int)(Color.black)));
           } else {
-            tiles[x][y] = new Tile(' ', tuple(cast(int)(Color.white), colors[p.color]));
+            tiles[x][y] = new Tile(p.ch, tuple(cast(int)(Color.white), colors[p.color]));
           }
           
         }
@@ -261,7 +269,7 @@ void renderMap(MapRenderType mrt, Terminal* t) {
           if(p.ocean) {
             tiles[x][y] = new Tile('~', tuple(colors[p.color], cast(int)(Color.black)));
           } else {
-            if(p.owner != null) tiles[x][y] = new Tile(' ', tuple(cast(int)(Color.white), colors[p.owner.color]));     
+            if(p.owner != null) tiles[x][y] = new Tile(p.owner.ch, tuple(cast(int)(Color.white), colors[p.owner.color]));     
           }
         }
       }

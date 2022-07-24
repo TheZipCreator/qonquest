@@ -3,4 +3,4 @@ name "Belgrade";
 color 13;
 city 75 27;
 owner "YUG";
-adjacent 11 5 4;
+adjacent 11 5 4 16 15 14;

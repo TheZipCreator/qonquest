@@ -417,6 +417,19 @@ void interpret(Node[] nodes, Scope s, Terminal* t) {
               straits ~= Strait(tuple(from0, from1), tuple(to0, to1));
               break;
             }
+            case "char": {
+              Lexeme ch = expect(LType.STRING);
+              if(ch.value.length > 1)
+                throw new ScriptException(l.line, format(Error.UNEXPECTED, l.value));
+              char c = ch.value[0];
+              if(CountryScope cs = cast(CountryScope)s) {
+                cs.c.ch = c;
+              } else if(ProvinceScope ps = cast(ProvinceScope)s) {
+                ps.p.ch = c;
+              } else incorrectScope(l.line);
+              expect(LType.SEMICOLON);
+              break;
+            }
             case "global":
               interpret(expectBlock().contents, new GlobalScope(), t);
               break;
