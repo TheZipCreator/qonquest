@@ -83,141 +83,145 @@ enum Error {
 
 Block[string] scripts;
 
+Node[] parseScript(string code) {
+  // 1. lex
+  Lexeme[] lexemes;
+  {
+    string value = "";
+    int line = 1;
+    enum State {
+      START, STRING, COMMENT
+    }
+    State state = State.START;
+    void add() {
+      if(value != "") {
+        if(isNumeric(value)) {
+          lexemes ~= new Lexeme(line, value, LType.INT);
+        } else {
+          lexemes ~= new Lexeme(line, value, LType.SYMBOL);
+        }
+        value = "";
+      }
+    }
+    void op(string o, LType t) {
+      add();
+      lexemes ~= new Lexeme(line, o, t);
+    }
+    for(int i = 0; i < code.length; i++) {
+      char c = code[i];
+      char next = i+1 < code.length ? code[i+1] : '\0';
+      final switch(state) {
+        case State.START:
+          switch(c) {
+            case ' ':
+            case '\t':
+              add();
+              break;
+            case '\n':
+              add();
+              line++;
+              break;
+            case '\r':
+              break; // every single time I make a lexer I ALWAYS forget to add this. thanks windows.
+            case '"':
+              state = State.STRING;
+              break;
+            case ';':
+              op(";", LType.SEMICOLON);
+              break;
+            case '{':
+              op("{", LType.LBRACE);
+              break;
+            case '}':
+              op("}", LType.RBRACE);
+              break;
+            case '#':
+              state = State.COMMENT;
+              break;
+            default:
+              value ~= c;
+              break;
+          }
+          break;
+        case State.STRING:
+          switch(c) {
+            case '"':
+              lexemes ~= new Lexeme(line, value, LType.STRING);
+              value = "";
+              state = State.START;
+              break;
+            case '\\':
+              switch(next) {
+                case 'n':
+                  value ~= '\n';
+                  i++;
+                  break;
+                case 't':
+                  value ~= '\t';
+                  i++;
+                  break;
+                case '"':
+                  value ~= '"';
+                  i++;
+                  break;
+                case '\\':
+                  value ~= '\\';
+                  i++;
+                  break;
+                default:
+                  throw new ScriptException(line, format(Error.INVALID_ESCAPE_SEQUENCE, next));
+              }
+              break;
+            default:
+              value ~= c;
+              break;
+          }
+          break;
+        case State.COMMENT:
+          switch(c) {
+            case '\n':
+              state = State.START;
+              line++;
+              break;
+            default:
+              break;
+          }
+          break;
+      }
+    }
+    op("", LType.EOF);
+  }
+  // 2. parse
+  Node[] stack;
+  bool isLexeme(Node n, LType t) {
+    if(cast(Lexeme)n) return (cast(Lexeme)n).type == t;
+    return false;
+  }
+  for(int i = 0; i < lexemes.length; i++) {
+    Lexeme l = lexemes[i];
+    switch(l.type) {
+      case LType.RBRACE: {
+        int j;
+        for(j = cast(int)(stack.length)-1; j >= 0 && !isLexeme(stack[j], LType.LBRACE); j--) {}
+        if(j < 0) throw new ScriptException(l.line, format(Error.UNMATCHED, "}"));
+        int line = lexemes[j].line;
+        Node[] contents = stack[j+1..$];
+        stack = stack[0..j];
+        stack ~= new Block(line, contents);
+        break;
+      }
+      default:
+        stack ~= l;
+    }
+  }
+  return stack;
+}
+
 void loadScripts(string dir, Terminal* t) {
   void loadScript(string script) {
     string code = std.file.readText(script);
-    // 1. lex
-    Lexeme[] lexemes;
-    {
-      string value = "";
-      int line = 1;
-      enum State {
-        START, STRING, COMMENT
-      }
-      State state = State.START;
-      void add() {
-        if(value != "") {
-          if(isNumeric(value)) {
-            lexemes ~= new Lexeme(line, value, LType.INT);
-          } else {
-            lexemes ~= new Lexeme(line, value, LType.SYMBOL);
-          }
-          value = "";
-        }
-      }
-      void op(string o, LType t) {
-        add();
-        lexemes ~= new Lexeme(line, o, t);
-      }
-      for(int i = 0; i < code.length; i++) {
-        char c = code[i];
-        char next = i+1 < code.length ? code[i+1] : '\0';
-        final switch(state) {
-          case State.START:
-            switch(c) {
-              case ' ':
-              case '\t':
-                add();
-                break;
-              case '\n':
-                add();
-                line++;
-                break;
-              case '\r':
-                break; // every single time I make a lexer I ALWAYS forget to add this. thanks windows.
-              case '"':
-                state = State.STRING;
-                break;
-              case ';':
-                op(";", LType.SEMICOLON);
-                break;
-              case '{':
-                op("{", LType.LBRACE);
-                break;
-              case '}':
-                op("}", LType.RBRACE);
-                break;
-              case '#':
-                state = State.COMMENT;
-                break;
-              default:
-                value ~= c;
-                break;
-            }
-            break;
-          case State.STRING:
-            switch(c) {
-              case '"':
-                lexemes ~= new Lexeme(line, value, LType.STRING);
-                value = "";
-                state = State.START;
-                break;
-              case '\\':
-                switch(next) {
-                  case 'n':
-                    value ~= '\n';
-                    i++;
-                    break;
-                  case 't':
-                    value ~= '\t';
-                    i++;
-                    break;
-                  case '"':
-                    value ~= '"';
-                    i++;
-                    break;
-                  case '\\':
-                    value ~= '\\';
-                    i++;
-                    break;
-                  default:
-                    throw new ScriptException(line, format(Error.INVALID_ESCAPE_SEQUENCE, next));
-                }
-                break;
-              default:
-                value ~= c;
-                break;
-            }
-            break;
-          case State.COMMENT:
-            switch(c) {
-              case '\n':
-                state = State.START;
-                line++;
-                break;
-              default:
-                break;
-            }
-            break;
-        }
-      }
-      op("", LType.EOF);
-    }
-    // 2. parse
-    Node[] stack;
-    bool isLexeme(Node n, LType t) {
-      if(cast(Lexeme)n) return (cast(Lexeme)n).type == t;
-      return false;
-    }
-    for(int i = 0; i < lexemes.length; i++) {
-      Lexeme l = lexemes[i];
-      switch(l.type) {
-        case LType.RBRACE: {
-          int j;
-          for(j = cast(int)(stack.length)-1; j >= 0 && !isLexeme(stack[j], LType.LBRACE); j--) {}
-          if(j < 0) throw new ScriptException(l.line, format(Error.UNMATCHED, "}"));
-          int line = lexemes[j].line;
-          Node[] contents = stack[j+1..$];
-          stack = stack[0..j];
-          stack ~= new Block(line, contents);
-          break;
-        }
-        default:
-          stack ~= l;
-      }
-    }
     // 3. store
-    scripts[script] = new Block(0, stack);
+    scripts[script] = new Block(0, parseScript(code));
   }
   foreach(string file; dirEntries(dir, SpanMode.breadth)) {
     file = file.replace("\\", "/"); // make sure slashes are consistent

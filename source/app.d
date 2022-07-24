@@ -70,6 +70,7 @@ void main() {
     changeMode(GameMode.MAIN_MENU, &t);
     toggles["waitBattleRounds"] = false;
     toggles["seeAllBattles"] = false;
+    toggles["cheats"] = false;
     void expectArgs(string cmd, string[] args, int n) {
       if(args.length != n) {
         throw new CommandException(format(Error.COMMAND_REQUIRES_ARGS, cmd, n));
@@ -167,6 +168,11 @@ void main() {
                   t.writeln("  end\n\tends the turn");
                   t.writeln("  toggle\n\ttoggles a toggle");
                   t.writeln("  toggles\n\tdisplays all toggles");
+                  if(toggles["cheats"]) {
+                    t.writeln("Cheat commands:");
+                    t.writeln("  script <script>\n\texecutes a script");
+                    t.writeln("  run <command>\n\truns the input as a script");
+                  }
                   break;
                 case "map":
                   expectArgs(cmd, args, 1);
@@ -250,6 +256,22 @@ void main() {
                   t.writefln("seeAllBattles: %s\n\tDisplays all battles", toggles["seeAllBattles"]);
                   break;
                 }
+                case "script":
+                  expectArgs(cmd, args, 1);
+                  if(!toggles["cheats"]) throw new CommandException(format(Error.NO_COMMAND, cmd));
+                  runScript(args[0], new GlobalScope(), &t);
+                  break;
+                case "run": {
+                  expectAtLeastArgs(cmd, args, 1);
+                  if(!toggles["cheats"]) throw new CommandException(format(Error.NO_COMMAND, cmd));
+                  string script = args.join(" ");
+                  try {
+                    interpret(parseScript(script), new GlobalScope(), &t);
+                  } catch(ScriptException e) {
+                    throw new CommandException(to!string(e.message));
+                  }
+                  break;
+                }
                 default:
                   throw new CommandException(format(Error.NO_COMMAND, cmd));
               }
@@ -265,11 +287,14 @@ void main() {
         t.color(Color.white, Color.black);
       }
     }
-  } catch(Exception e) {
+  } catch(Throwable e) {
+    // this exists so that program doesn't immediately close when an error occurs
+    t.color(Color.white, Color.black);
+    t.writeln("Error handler triggered.\n");
     t.color(Color.red, Color.black);
     t.writeln(e.toString());
     t.color(Color.white, Color.black);
-    t.writeln("Exception caught. Press any key to exit.");
+    t.writeln("\nPress any key to exit.");
     auto input = RealTimeConsoleInput(&t, ConsoleInputFlags.raw);
     input.getch();
     return;
