@@ -3,4 +3,4 @@ name "Stockholm";
 color 5;
 city 72 10;
 owner "SWE";
-adjacent 8 18;
+adjacent 8 18 19;

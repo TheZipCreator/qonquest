@@ -383,7 +383,7 @@ void changeMode(GameMode newMode, Terminal* t) {
   final switch(gameMode) {
     case GameMode.MAIN_MENU:
       t.writeln(readText("data/logo.txt"));
-      t.writeln("Qonquest v0.2");
+      t.writeln(readText("data/version.txt"));
       t.writeln("Type 'help' in any mode for help");
       break;
     case GameMode.GAME:

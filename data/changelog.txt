@@ -19,3 +19,6 @@ Version 0.2:
   ~ Fixed error handler
   ~ Changing scope in a script no longer crashes the interpreter
   ~ France now owns Corsica
+Version 0.2.1:
+  + Added Norway
+  ~ Version number is now stored in a text file (version.txt)

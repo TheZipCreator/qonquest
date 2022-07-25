@@ -1,6 +1,8 @@
 # ran before provinces are loaded
 # global scope
-registerCountry "FRA" "SPA" "GBR" "GER" "ITA" "NET" "ALG" "SWE" "DEN" "ICE" "GRE" "TUR" "YUG" "ROM" "HUN" "POL" "BAL" "FIN";
+registerCountry "FRA" "SPA" "GBR" "GER" "ITA" "NET" "ALG" "SWE" "DEN" "ICE" "GRE" "TUR" "YUG" "ROM" "HUN" "POL" "BAL" "FIN" "NOR";
 strait 41 20 41 21; # London <-> Paris
 strait 15 5 32 13; # Reykjavik <-> London
 strait 35 37 35 38; # Madrid <-> Algiers
+strait 15 5 52 10; # Reykjavik <-> Oslo
+strait 43 16 52 10; # London <-> Oslo

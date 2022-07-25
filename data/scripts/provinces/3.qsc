@@ -3,4 +3,4 @@ name "London";
 color 9;
 city 42 18;
 owner "GBR";
-adjacent 1 10;
+adjacent 1 10 19;

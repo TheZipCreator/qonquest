@@ -1,0 +1,7 @@
+# 19 - Oslo
+name "Oslo";
+color 13;
+char ".";
+city 60 10;
+owner "NOR";
+adjacent 9 10 3;
