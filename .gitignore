@@ -15,7 +15,7 @@ qonquest-test-*
 *.lst
 *.pdb
 qonquest.bat
-source/terminal.d
 release/
 todo.txt
 *.qsf
+source/arsd
