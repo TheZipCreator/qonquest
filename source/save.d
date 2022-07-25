@@ -4,18 +4,21 @@ import std.conv, std.zlib, std.file, std.string;
 import qonquest.app, qonquest.map, qonquest.script;
 
 ubyte[] toArray(string s) {
+  /// Converts a string to an array of bytes.
   ubyte[] res;
   foreach(char c; s) res ~= cast(ubyte)c;
   return res;
 }
 
 string fromArray(ubyte[] a) {
+  /// Converts an array of bytes to a string.
   string res;
   foreach(ubyte b; a) res ~= cast(char)b;
   return res;
 }
 
 ubyte[] save(ushort ver) {
+  /// Saves the current game given a version number.
   ubyte[] file;
   file ~= [ver & 0xFF, ver >> 8]; // format (little endian)
   final switch(ver) {
@@ -47,6 +50,7 @@ ubyte[] save(ushort ver) {
 }
 
 void load(ubyte[] save) {
+  /// Loads a game from a save file.
   int ptr = 0;
   ubyte next() {
     return save[ptr++];
@@ -73,6 +77,7 @@ void load(ubyte[] save) {
 }
 
 string saveList() {
+  /// Lists all saved games.
   string s = "";
   foreach(string file; dirEntries("data/saves/", SpanMode.shallow)) {
     if(file.endsWith(".qsf")) {

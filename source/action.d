@@ -6,13 +6,15 @@ import std.string, std.random, std.algorithm;
 import core.thread;
 
 interface Action {
-  void commit(Terminal* t);
-  void display(Terminal* t);
+  /// Represents a single action that can be performed by a player or AI.
+  void commit(Terminal* t); /// Peforms the action.
+  void display(Terminal* t); /// Displays the action.
 }
 
 class MoveAction : Action {
-  Province* source; // source tile
-  Province* dest; // destination tile
+  /// Represents a movement.
+  Province* source; /// source tile
+  Province* dest; /// destination tile
   this(Province* source, Province* dest) {
     this.source = source;
     this.dest = dest;
@@ -107,6 +109,7 @@ class MoveAction : Action {
 }
 
 void commitAll(Action[] actions, Terminal* t) {
+  /// Commits a list of actions.
   foreach(Action a; actions) {
     a.commit(t);
   }

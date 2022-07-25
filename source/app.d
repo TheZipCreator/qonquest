@@ -27,13 +27,20 @@ For convinience:
 */
 
 enum GameMode {
-  MAIN_MENU,
-  GAME
+  /**
+    GameMode is used to represent what state the game currently is in.
+  **/
+  MAIN_MENU, /// Main Menu
+  GAME /// Mid-game
 }
 
 GameMode gameMode;
 
 enum Error {
+  /**
+    Error contains the string representation of errors that can occur in the game. 
+    These are formatted using D's format() function.
+  **/
   COMMAND_REQUIRES_ARGS = "Command \"%s\" requires exactly %d arguments.",
   COMMAND_REQUIRES_AT_LEAST_ARGS = "Command \"%s\" requires at least %d arguments.",
   NO_COMMAND = "No command \"%s\" found.",
@@ -50,17 +57,18 @@ enum Error {
 }
 
 class CommandException : Exception {
+  /// CommandException is used to represent errors that occur when a command is executed.
   this(string message) {
     super(message);
   }
 }
 
-Country* player;
-Action[] actions;
-int turn = 0;
-int troopsToDeploy = 0;
-bool[string] toggles;
-bool firstTurn = true;
+Country* player; /// Pointer to the country the player is playing as
+Action[] actions; /// List of actions that have been performed by the player this turn
+int turn = 0; /// The turn number
+int troopsToDeploy = 0; /// The number of troops the player has to deploy this turn
+bool[string] toggles; /// List of toggles that may be enabled or disabled
+bool firstTurn = true; /// Whether or not the player is on the first turn (this may seem redundant, but it's important when saves are loaded)
 
 void main() {
   auto t = Terminal(ConsoleOutputType.linear);
@@ -324,10 +332,12 @@ void main() {
 }
 
 string[] nextCommand(Terminal* t) {
+  /// Reads a command from the user and returns it as an array of strings.
   return t.getline().split(" ");
 }
 
 void nextTurn(Terminal* t) {
+  /// Advances the game by one turn.
   if(!firstTurn) {
     commitAll(actions, t);
     actions = [];
@@ -368,11 +378,12 @@ void nextTurn(Terminal* t) {
 }
 
 void changeMode(GameMode newMode, Terminal* t) {
+  /// Changes the game mode to a desired mode.
   gameMode = newMode;
   final switch(gameMode) {
     case GameMode.MAIN_MENU:
       t.writeln(readText("data/logo.txt"));
-      t.writeln("Qonquest v0.1.1");
+      t.writeln("Qonquest v0.2");
       t.writeln("Type 'help' in any mode for help");
       break;
     case GameMode.GAME:
