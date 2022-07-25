@@ -1,6 +1,6 @@
-module qonquest.app;
+module app;
 
-import qonquest.map, qonquest.script, qonquest.action, qonquest.save;
+import map, script, action, saveload;
 import std.stdio, std.string, std.file, std.conv, std.algorithm, std.typecons;
 import core.stdc.stdlib : exit;
 import arsd.terminal;

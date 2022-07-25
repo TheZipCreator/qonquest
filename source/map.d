@@ -1,6 +1,6 @@
-module qonquest.map;
+module map;
 
-import qonquest.script, qonquest.app, qonquest.action;
+import script, app, action;
 import std.file, std.typecons, std.stdio, std.string, std.traits, std.typecons, std.random;
 import arsd.terminal;
 

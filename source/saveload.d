@@ -1,7 +1,7 @@
-module qonquest.save;
+module saveload;
 
 import std.conv, std.zlib, std.file, std.string;
-import qonquest.app, qonquest.map, qonquest.script;
+import app, map, script;
 
 ubyte[] toArray(string s) {
   /// Converts a string to an array of bytes.

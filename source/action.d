@@ -1,6 +1,6 @@
-module qonquest.action;
+module action;
 
-import qonquest.map, qonquest.app;
+import map, app;
 import arsd.terminal;
 import std.string, std.random, std.algorithm;
 import core.thread;
