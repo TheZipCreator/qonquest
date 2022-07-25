@@ -36,11 +36,11 @@ enum GameMode {
 
 GameMode gameMode;
 
+/**
+  Error contains the string representation of errors that can occur in the game. 
+  These are formatted using D's format() function.
+**/
 enum Error {
-  /**
-    Error contains the string representation of errors that can occur in the game. 
-    These are formatted using D's format() function.
-  **/
   COMMAND_REQUIRES_ARGS = "Command \"%s\" requires exactly %d arguments.",
   COMMAND_REQUIRES_AT_LEAST_ARGS = "Command \"%s\" requires at least %d arguments.",
   NO_COMMAND = "No command \"%s\" found.",
@@ -56,8 +56,8 @@ enum Error {
   NO_TOGGLE = "Toggle \"%s\" does not exist.",
 }
 
+/// CommandException is used to represent errors that occur when a command is executed.
 class CommandException : Exception {
-  /// CommandException is used to represent errors that occur when a command is executed.
   this(string message) {
     super(message);
   }
@@ -331,13 +331,13 @@ void main() {
   }
 }
 
+/// Reads a command from the user and returns it as an array of strings.
 string[] nextCommand(Terminal* t) {
-  /// Reads a command from the user and returns it as an array of strings.
   return t.getline().split(" ");
 }
 
+/// Advances the game by one turn.
 void nextTurn(Terminal* t) {
-  /// Advances the game by one turn.
   if(!firstTurn) {
     commitAll(actions, t);
     actions = [];
@@ -377,8 +377,8 @@ void nextTurn(Terminal* t) {
   t.writefln("You can deploy %d troops", troopsToDeploy);
 }
 
+/// Changes the game mode to a desired mode.
 void changeMode(GameMode newMode, Terminal* t) {
-  /// Changes the game mode to a desired mode.
   gameMode = newMode;
   final switch(gameMode) {
     case GameMode.MAIN_MENU:

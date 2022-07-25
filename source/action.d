@@ -5,14 +5,14 @@ import arsd.terminal;
 import std.string, std.random, std.algorithm;
 import core.thread;
 
+/// Represents a single action that can be performed by a player or AI.
 interface Action {
-  /// Represents a single action that can be performed by a player or AI.
   void commit(Terminal* t); /// Peforms the action.
   void display(Terminal* t); /// Displays the action.
 }
 
+/// Represents a movement.
 class MoveAction : Action {
-  /// Represents a movement.
   Province* source; /// source tile
   Province* dest; /// destination tile
   this(Province* source, Province* dest) {
