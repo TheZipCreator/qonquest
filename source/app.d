@@ -54,6 +54,7 @@ enum Error {
   PROVINCE_NOT_OWNED = "You do not own %s.",
   NOT_ADJACENT = "%s is not adjacent to %s.",
   NO_TOGGLE = "Toggle \"%s\" does not exist.",
+  INVALID_AMOUNT = "Invalid amount %s.",
 }
 
 /// CommandException is used to represent errors that occur when a command is executed.
@@ -243,6 +244,8 @@ void main() {
                   expectArgs(cmd, args, 2);
                   try {
                     int amt = to!int(args[0]);
+                    if(amt == -25) writeln("shoutouts to ibrokqr");
+                    if(amt < 0) throw new CommandException(format(Error.INVALID_AMOUNT, args[0]));
                     Province* p = findProvince(args[1])[0];
                     if(p is null) throw new CommandException(format(Error.PROVINCE_DOESNT_EXIST, args[1]));
                     if(amt > troopsToDeploy) 
