@@ -73,6 +73,8 @@ bool firstTurn = true; /// Whether or not the player is on the first turn (this 
 
 void main() {
   auto t = Terminal(ConsoleOutputType.linear);
+  t.color(Color.white, Color.black);
+  t.clear();
   try {
     loadScripts("./data/scripts", &t);
     runScript("./data/scripts/launch.qsc", new GlobalScope(), &t);
