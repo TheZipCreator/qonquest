@@ -79,7 +79,7 @@ void load(ubyte[] save) {
 /// Lists all saved games.
 string saveList() {
   string s = "";
-  foreach(string file; dirEntries("data/saves/", SpanMode.shallow)) {
+  foreach(string file; dirEntries("./data/saves/", SpanMode.shallow)) {
     if(file.endsWith(".qsf")) {
       string saveName = file[file.lastIndexOf("/")+1..$-4];
       s ~= format("%s\n", saveName);

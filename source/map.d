@@ -160,7 +160,7 @@ void loadMap(string file, Terminal* t) {
     } else {
       // create new province and run province setup
       provinces[id] = Province([tuple(x, y)]);
-      runScript(format("data/scripts/provinces/%d.qsc", id), new ProvinceScope(&(provinces[id])), t);
+      runScript(format("./data/scripts/provinces/%d.qsc", id), new ProvinceScope(&(provinces[id])), t);
     }
   }
 }
@@ -318,5 +318,5 @@ void renderMap(MapRenderType mrt, Terminal* t) {
 /// Registers a country with the game (triggered by the qsc command "registerCountry")
 void registerCountry(string tag, Terminal* t) {
   countries[tag] = new Country();
-  runScript(format("data/scripts/countries/%s.qsc", tag), new CountryScope(&(countries[tag])), t);
+  runScript(format("./data/scripts/countries/%s.qsc", tag), new CountryScope(&(countries[tag])), t);
 }

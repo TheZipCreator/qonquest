@@ -74,9 +74,9 @@ bool firstTurn = true; /// Whether or not the player is on the first turn (this 
 void main() {
   auto t = Terminal(ConsoleOutputType.linear);
   try {
-    loadScripts("data/scripts", &t);
-    runScript("data/scripts/launch.qsc", new GlobalScope(), &t);
-    loadMap("data/map.bin", &t);
+    loadScripts("./data/scripts", &t);
+    runScript("./data/scripts/launch.qsc", new GlobalScope(), &t);
+    loadMap("./data/map.bin", &t);
     changeMode(GameMode.MAIN_MENU, &t);
     toggles["waitBattleRounds"] = false;
     toggles["seeAllBattles"] = false;
@@ -136,7 +136,7 @@ void main() {
                 case "changelog": {
                   expectArgs(cmd, args, 0);
                   t.writeln("Changelog:");
-                  string[] changelog = readText("data/changelog.txt").splitLines();
+                  string[] changelog = readText("./data/changelog.txt").splitLines();
                   foreach(string s; changelog) {
                     if(s.indexOf("+") != -1) {
                       t.color(Color.green | Bright, Color.black);
@@ -155,7 +155,7 @@ void main() {
                 case "load":
                   expectArgs(cmd, args, 1);
                   try {
-                    load(cast(ubyte[])read(format("data/saves/%s.qsf", args[0])));
+                    load(cast(ubyte[])read(format("./data/saves/%s.qsf", args[0])));
                     nextTurn(&t);
                   } catch(FileException e) {
                     writefln("\nError loading save: %s", e.message);
@@ -286,7 +286,7 @@ void main() {
                 }
                 case "save":
                   expectArgs(cmd, args, 1);
-                  std.file.write(format("data/saves/%s.qsf", args[0]), save(0));
+                  std.file.write(format("./data/saves/%s.qsf", args[0]), save(0));
                   t.writeln("Save complete");
                   break;
                 case "script":
@@ -385,8 +385,8 @@ void changeMode(GameMode newMode, Terminal* t) {
   gameMode = newMode;
   final switch(gameMode) {
     case GameMode.MAIN_MENU:
-      t.writeln(readText("data/logo.txt"));
-      t.writeln(readText("data/version.txt"));
+      t.writeln(readText("./data/logo.txt"));
+      t.writeln(readText("./data/version.txt"));
       t.writeln("Type 'help' in any mode for help");
       break;
     case GameMode.GAME:
