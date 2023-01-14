@@ -4,6 +4,7 @@
 	],
 	"copyright": "Copyright © 2022, Zip",
 	"dependencies": {
+		"arsd-official:terminal": "~>10.9.8"
 	},
 	"description": "A minimal D application.",
 	"license": "GNU General Public License v3",
